@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>...</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  background:#000;
+}
+
+/* ---------- slideshow ---------- */
+.slideshow{
+  position:fixed;
+  inset:0;
+  z-index:0;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  animation:fade 24s infinite;
+}
+
+.slide:nth-child(1){animation-delay:0s;}
+.slide:nth-child(2){animation-delay:8s;}
+.slide:nth-child(3){animation-delay:16s;}
+
+@keyframes fade{
+  0%,100%{opacity:0}
+  10%,30%{opacity:1}
+}
+
+/* overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:1;
+  pointer-events:none;   /* ⭐ THIS FIXES BUTTONS */
+}
+
+
+/* ---------- content ---------- */
+.container{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  width:90%;
+  max-width:400px;
+  padding:20px;
+}
+
+/* responsive text */
+h1{
+  font-weight:300;
+  letter-spacing:2px;
+  font-size:clamp(1.8rem, 6vw, 2.6rem);
+  min-height:50px;
+}
+
+.sub{
+  opacity:.6;
+  margin-top:12px;
+  font-size:clamp(.8rem, 3.5vw, 1rem);
+}
+
+/* ---------- buttons ---------- */
+.buttons{
+  margin-top:40px;
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+button{
+  min-width:110px;
+  padding:14px 26px;
+  border:none;
+  border-radius:40px;
+  font-size:1rem;
+  cursor:pointer;
+  transition:.25s;
+}
+
+/* bigger tap area on mobile */
+button:active{
+  transform:scale(.95);
+}
+
+#yes{
+  background:white;
+  color:black;
+}
+
+#no{
+  background:transparent;
+  color:white;
+  border:1px solid white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="slideshow">
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600');"></div>
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600');"></div>
+  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1493244040629-496f6d136cc3?q=80&w=1600');"></div>
+</div>
+
+<div class="overlay"></div>
+
+<div class="container">
+  <h1 id="typing"></h1>
+  <p class="sub">There are only so many things I can do before I run out of ideas..</p>
+
+  <div class="buttons">
+    <button id="yes">haan</button>
+    <button id="no">hmph nhi</button>
+  </div>
+</div>
+
+<audio id="music" loop src="song.mp3"></audio>
+
+<script>
+/* mobile-safe music start */
+document.body.addEventLis
