@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>...</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -21,115 +20,125 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  color:white;
-  background:#000;
+  color:#2d2d2d; /* darker text for pastel bg */
+  user-select:none;
+
+  background:linear-gradient(
+    135deg,
+    #ffd6e8,
+    #e6dcff,
+    #d6f0ff,
+    #fff1d6
+  );
+
+  background-size:400% 400%;
+  animation:gradientMove 18s ease infinite;
 }
 
-/* ---------- slideshow ---------- */
-.slideshow{
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* soft glow blobs */
+body::before,
+body::after{
+  content:"";
   position:fixed;
-  inset:0;
-  z-index:0;
+  width:400px;
+  height:400px;
+  border-radius:50%;
+  filter:blur(120px);
+  opacity:.25;
+  z-index:-1;
 }
 
-.slide{
-  position:absolute;
-  inset:0;
-  background-size:cover;
-  background-position:center;
-  opacity:0;
-  animation:fade 24s infinite;
+body::before{
+
+
+  background:#ffb3d9; /* soft pink */
+
+  
+
+  top:-100px;
+  left:-100px;
 }
 
-.slide:nth-child(1){animation-delay:0s;}
-.slide:nth-child(2){animation-delay:8s;}
-.slide:nth-child(3){animation-delay:16s;}
-
-@keyframes fade{
-  0%,100%{opacity:0}
-  10%,30%{opacity:1}
-}
-
-/* overlay */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  z-index:1;
-  pointer-events:none;   /* ⭐ THIS FIXES BUTTONS */
+body::after{
+  background:#b8c6ff; /* soft lavender */
+  bottom:-100px;
+  right:-100px;
 }
 
 
-/* ---------- content ---------- */
+/* content */
 .container{
-  position:relative;
-  z-index:2;
   text-align:center;
   width:90%;
-  max-width:400px;
+  max-width:420px;
   padding:20px;
 }
 
-/* responsive text */
 h1{
-  font-weight:300;
+  font-weight:400;
+  font-size:clamp(2.2rem, 7vw, 3.2rem); /* bigger */
+  min-height:60px;
   letter-spacing:2px;
-  font-size:clamp(1.8rem, 6vw, 2.6rem);
-  min-height:50px;
 }
 
 .sub{
-  opacity:.6;
-  margin-top:12px;
-  font-size:clamp(.8rem, 3.5vw, 1rem);
+  opacity:.75;
+  margin-top:14px;
+  font-size:clamp(1rem, 4vw, 1.15rem); /* bigger */
 }
 
-/* ---------- buttons ---------- */
+
+
+/* buttons */
 .buttons{
   margin-top:40px;
   display:flex;
-  gap:18px;
   justify-content:center;
-  flex-wrap:wrap;
+  gap:20px;
 }
 
 button{
-  min-width:110px;
-  padding:14px 26px;
-  border:none;
-  border-radius:40px;
-  font-size:1rem;
+  min-width:135px;
+  padding:16px 30px;
+  border-radius:45px;
+  font-size:1.1rem;
+  font-weight:500;
   cursor:pointer;
+  touch-action:manipulation;
   transition:.25s;
 }
 
-/* bigger tap area on mobile */
+
 button:active{
   transform:scale(.95);
 }
 
 #yes{
   background:white;
-  color:black;
+  color:#2d2d2d;
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
 
+
+
 #no{
-  background:transparent;
+  background:#2d2d2d;      /* dark solid */
   color:white;
-  border:1px solid white;
+  border:none;
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
 }
+
 </style>
 </head>
 
 <body>
-
-<div class="slideshow">
-  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600');"></div>
-  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600');"></div>
-  <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1493244040629-496f6d136cc3?q=80&w=1600');"></div>
-</div>
-
-<div class="overlay"></div>
 
 <div class="container">
   <h1 id="typing"></h1>
@@ -144,5 +153,108 @@ button:active{
 <audio id="music" loop src="song.mp3"></audio>
 
 <script>
-/* mobile-safe music start */
-document.body.addEventLis
+/* tap to start music (mobile safe) */
+document.body.addEventListener("click",()=>{
+  document.getElementById("music").play();
+},{once:true});
+
+
+/* typing */
+const text="maanogiii???";
+let i=0;
+function type(){
+  if(i<text.length){
+    document.getElementById("typing").innerHTML+=text[i++];
+    setTimeout(type,80);
+  }
+}
+type();
+
+
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+const subText=document.querySelector(".sub");
+
+let clicks=0;
+let interval=null;
+
+const msgs=["areyy 😒","soch lo… 🥺","thoda toh maan jao 😭"];
+
+
+/* NO button */
+noBtn.onclick=()=>{
+
+  clicks++;
+
+  if(clicks<=3){
+    subText.innerText=msgs[clicks-1];
+  }
+
+  if(clicks===3){
+    subText.innerText="no more pressing that button";
+    interval=setInterval(moveButton,350);
+  }
+};
+
+
+function moveButton(){
+
+  const w=window.innerWidth;
+  const h=window.innerHeight;
+
+  const bw=noBtn.offsetWidth;
+  const bh=noBtn.offsetHeight;
+
+  const zoneW=w*0.5;
+  const zoneH=h*0.5;
+
+  const startX=(w-zoneW)/2;
+  const startY=(h-zoneH)/2;
+
+  const x=startX+Math.random()*(zoneW-bw);
+  const y=startY+Math.random()*(zoneH-bh);
+
+  noBtn.style.position="fixed";
+  noBtn.style.left=x+"px";
+  noBtn.style.top=y+"px";
+}
+
+
+/* YES celebration */
+yesBtn.onclick=()=>{
+  clearInterval(interval);
+
+  subText.innerText="thank you… heheheheh ❤️";
+  yesBtn.style.transform="scale(1.8)";
+  yesBtn.innerText="❤️ haan ❤️";
+
+  confetti();
+};
+
+
+/* hearts */
+function confetti(){
+  for(let i=0;i<80;i++){
+    const d=document.createElement("div");
+    d.innerHTML=Math.random()>0.5?"❤️":"✨";
+    d.style.position="fixed";
+    d.style.left="50%";
+    d.style.top="50%";
+    d.style.fontSize="18px";
+    document.body.appendChild(d);
+
+    const a=Math.random()*2*Math.PI;
+    const dist=350*Math.random();
+
+    d.animate([
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${Math.cos(a)*dist}px,${Math.sin(a)*dist}px)`,opacity:0}
+    ],{duration:1500});
+
+    setTimeout(()=>d.remove(),1500);
+  }
+}
+</script>
+
+</body>
+</html>
